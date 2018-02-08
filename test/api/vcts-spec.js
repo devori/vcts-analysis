@@ -1,7 +1,7 @@
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import {expect} from 'chai';
-import {VCTS_PRIVATE_API_URL, VCTS_PUBLIC_API_URL} from '../../src/properties';
+import env from '../../src/properties';
 import * as vctsApi from '../../src/api/vcts';
 
 describe('api/vcts', () => {
@@ -12,11 +12,11 @@ describe('api/vcts', () => {
 
     before(() => {
         mockAxios
-            .onGet(`${VCTS_PRIVATE_API_URL}/users/${USER_ID}/markets/${MARKET}/assets`)
+            .onGet(`${env.VCTS_PRIVATE_API_URL}/users/${USER_ID}/markets/${MARKET}/assets`)
                 .reply(200, {
                     [BASE]: {A: [], B: []}
                 })
-            .onGet(`${VCTS_PUBLIC_API_URL}/markets/${MARKET}/tickers`)
+            .onGet(`${env.VCTS_PUBLIC_API_URL}/markets/${MARKET}/tickers`)
                 .reply(200, {
                     [BASE]: {A: {}, B: {}}
                 });

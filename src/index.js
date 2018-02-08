@@ -21,7 +21,7 @@ if (!user || !market || !firebaseAuthDir) {
     throw `Arguments error: ${firebaseAuthDir} ${user} ${market}`;
 }
 
-db.initialize(firebaseAuthDir);
+db.initialize(require(firebaseAuthDir));
 
 setInterval(() => {
     collector.collect(user, market);
