@@ -22,21 +22,39 @@ describe('router/private', function () {
         firestore.searchTickers.restore();
     });
 
-    it('return matched tickers', done => {
-        supertest(app)
-            .get('/tickers/poloniex/test')
-            .query({start: '1', end: '2'})
-            .expect('Content-Type', 'application/json; charset=utf-8')
-            .expect(200, ['tickers'])
-            .end(done);
+    describe('GET /tickers/:market/:base', () => {
+        it('return matched tickers', done => {
+            supertest(app)
+                .get('/tickers/poloniex/test')
+                .query({start: '1', end: '2'})
+                .expect('Content-Type', 'application/json; charset=utf-8')
+                .expect(200, ['tickers'])
+                .end(done);
+        });
+
+        it('return 500 when start and end are empty all', done => {
+            supertest(app)
+                .get('/tickers/poloniex/test')
+                .expect(500)
+                .end(done);
+        });
     });
 
-    it('return matched assets', done => {
-        supertest(app)
-            .get('/assets/test-user/poloniex/test')
-            .query({start: '1', end: '2'})
-            .expect('Content-Type', 'application/json; charset=utf-8')
-            .expect(200, ['assets'])
-            .end(done);
+    describe('GET /assets/:user/:market/:base', () => {
+        it('return matched assets', done => {
+            supertest(app)
+                .get('/assets/test-user/poloniex/test')
+                .query({start: '1', end: '2'})
+                .expect('Content-Type', 'application/json; charset=utf-8')
+                .expect(200, ['assets'])
+                .end(done);
+        });
+
+        it('return 500 when start and end are empty all', done => {
+            supertest(app)
+                .get('/assets/test-user/poloniex/test')
+                .expect(500)
+                .end(done);
+        });
     });
 });
