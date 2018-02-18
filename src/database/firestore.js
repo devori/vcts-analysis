@@ -83,5 +83,9 @@ export function searchAssets(user, market, base, start, end) {
         dbRef = dbRef.where('timestamp', '<=', end);
     }
 
-    return dbRef.get();
+    return dbRef.get().then(docs => {
+        const result = [];
+        docs.forEach(d => result.push(d.data()));
+        return result;
+    });
 }
