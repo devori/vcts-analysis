@@ -17,17 +17,19 @@ export function stop(user, market) {
 export function collect(user, market) {
     const timestamp = new Date().getTime();
 
-    vctsApi.getAssets(user, market).then((data) => {
-        Object.keys(data).forEach(base => {
-            data[base].timestamp = timestamp;
+    vctsApi.getAssets(user, market).then(assets => {
+        return vctsApi.getTickers(market).then(tickers => ({assets, tickers}));
+    }).then(({assets, tickers}) => {
+        Object.keys(assets).forEach(base => {
+            assets[base].timestamp = timestamp;
         });
-        db.recordAssets(user, market, data);
-    }).catch((err) => console.log(err));
+        db.recordAssets(user, market, assets);
 
-    vctsApi.getTickers(market).then((data) => {
-        Object.keys(data).forEach(base => {
-            data[base].timestamp = timestamp;
+        Object.keys(tickers).forEach(base => {
+            tickers[base].timestamp = timestamp;
         });
-        db.recordTickers(market, data);
+        db.recordTickers(market, tickers);
+
+        db.recordAssetsSummary(user, market, assets, tickers);
     }).catch((err) => console.log(err));
 }

@@ -28,6 +28,30 @@ export function recordAssets(user, market, data) {
     });
 }
 
+export function recordAssetsSummary(user, market, assets, tickers) {
+    const dbRef = db
+        .collection('analysis')
+        .doc('summaries')
+        .collection('accounts')
+        .doc(user)
+        .collection('markets')
+        .doc(market);
+
+    Object.keys(assets).forEach(base => {
+        const total = Object.keys(assets[base])
+            .filter(name => name !== 'timestamp')
+            .reduce((accum, name) => {
+                const arr = assets[base][name];
+                const bid = base === name ? 1 : (tickers[base][name].bid || 0);
+                return accum + arr.reduce((sum, {units = 0}) => sum + units * bid, 0);
+            }, 0);
+
+        dbRef
+            .collection(base)
+            .add({total, timestamp: assets[base].timestamp});
+    });
+}
+
 export function recordTickers(market, data) {
     const dbRef = db
         .collection('analysis')
@@ -66,9 +90,17 @@ export function searchTickers(market, base, start, end) {
 }
 
 export function searchAssets(user, market, base, start, end) {
+    return search('assets', user, market, base, start, end);
+}
+
+export function searchAssetsSummary(user, market, base, start, end) {
+    return search('summaries', user, market, base, start, end);
+}
+
+function search(type, user, market, base, start, end) {
     let dbRef = db
         .collection('analysis')
-        .doc('assets')
+        .doc(type)
         .collection('accounts')
         .doc(user)
         .collection('markets')

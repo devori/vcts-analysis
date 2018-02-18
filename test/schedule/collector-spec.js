@@ -20,6 +20,7 @@ describe('schedule/collector', () => {
 
         sinon.stub(firestore, 'recordAssets');
         sinon.stub(firestore, 'recordTickers');
+        sinon.stub(firestore, 'recordAssetsSummary');
 
         sinon.stub(vctsApi, 'getAssets').resolves({[BASE]: {}});
         sinon.stub(vctsApi, 'getTickers').resolves({[BASE]: {}});
@@ -31,6 +32,7 @@ describe('schedule/collector', () => {
 
         firestore.recordAssets.restore();
         firestore.recordTickers.restore();
+        firestore.recordAssetsSummary.restore();
 
         vctsApi.getAssets.restore();
         vctsApi.getTickers.restore();
@@ -59,6 +61,15 @@ describe('schedule/collector', () => {
 
             setTimeout(() => {
                 expect(firestore.recordTickers.calledWith(MARKET, sinon.match.has(BASE))).to.be.true;
+                done();
+            }, 100);
+        });
+
+        it('call recordAssets when func run', done => {
+            spySetInterval.args[0][0]();
+
+            setTimeout(() => {
+                expect(firestore.recordAssetsSummary.calledWith(USER, MARKET, sinon.match.has(BASE), sinon.match.has(BASE))).to.be.true;
                 done();
             }, 100);
         });
