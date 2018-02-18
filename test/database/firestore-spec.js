@@ -1,6 +1,6 @@
 import sinon from 'sinon';
 import {expect, should} from 'chai';
-import firebaseAdmin from 'firebase-admin';
+import * as firebaseAdmin from 'firebase-admin';
 import * as firestore from '../../src/database/firestore';
 
 describe('database/firestore', () => {
