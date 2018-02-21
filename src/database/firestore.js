@@ -38,7 +38,7 @@ export function recordAssetsSummary(user, market, assets, tickers) {
         .doc(market);
 
     Object.keys(assets).forEach(base => {
-        const total = Object.keys(assets[base])
+        const units = Object.keys(assets[base])
             .filter(name => name !== 'timestamp')
             .reduce((accum, name) => {
                 const arr = assets[base][name];
@@ -48,7 +48,13 @@ export function recordAssetsSummary(user, market, assets, tickers) {
 
         dbRef
             .collection(base)
-            .add({total, timestamp: assets[base].timestamp});
+            .add({
+                units,
+                rate: {
+                    usdt: tickers['USDT'][base].bid
+                },
+                timestamp: assets[base].timestamp,
+            });
     });
 }
 
