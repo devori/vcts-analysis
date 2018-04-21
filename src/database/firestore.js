@@ -40,7 +40,7 @@ export function recordAssetsSummary(user, market, assets, tickers) {
     Object.keys(assets).forEach(base => {
         const units = Object.keys(assets[base])
             .filter(name => name !== 'timestamp')
-            .filter(name => tickers[base][name] !== undefined)
+            .filter(name => base === name || tickers[base][name] !== undefined)
             .reduce((accum, name) => {
                 const arr = assets[base][name];
                 const bid = base === name ? 1 : (tickers[base][name].bid || 0);
