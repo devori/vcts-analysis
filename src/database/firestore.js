@@ -52,7 +52,7 @@ export function recordAssetsSummary(user, market, assets, tickers) {
             .add({
                 units,
                 rate: {
-                    usdt: tickers['USDT'][base].bid
+                    usdt: base === 'USDT' ? 1 : tickers['USDT'][base].bid
                 },
                 timestamp: assets[base].timestamp,
             });
