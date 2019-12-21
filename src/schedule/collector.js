@@ -3,7 +3,7 @@ import * as vctsApi from '../api/vcts';
 
 const intervalIds = {};
 
-export function start(interval, user, market) {
+export function start(interval = 1000 * 60 * 60, user, market) {
     intervalIds[user] = intervalIds[user] || {};
     intervalIds[user][market] = setInterval(() => {
         collect(user, market);

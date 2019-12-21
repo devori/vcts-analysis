@@ -6,11 +6,11 @@ import * as collector from './schedule/collector';
 import privateRouter from './router/private';
 
 const args = argumentParser.parse(process.argv.slice(2));
-const {user, market, interval} = args;
+const { user, market, interval } = args;
 const firebaseAuthFilePath = args['firebase-auth-file-path'];
 
-if (!user || !market || !firebaseAuthFilePath) {
-    throw `Arguments error: ${firebaseAuthFilePath} ${user} ${market}`;
+if (!user || !market || !firebaseAuthFilePath || !interval) {
+    throw `Arguments error: ${firebaseAuthFilePath} ${user} ${market} ${interval}`;
 }
 
 db.initialize(require(firebaseAuthFilePath));
